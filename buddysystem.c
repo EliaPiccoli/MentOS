@@ -64,12 +64,12 @@ block_found:
 	page->private = order;
 
 	// Decrease the number of free blocks in the found free_area_t.
-    (area->nr_free)--;
+    	(area->nr_free)--;
 
 	/* We found a block with 2^k page frames to satisfy a request
-     * of 2^h page frames. If h < k, then we can split the block with 2^k
+     	 * of 2^h page frames. If h < k, then we can split the block with 2^k
 	 * pages until it is large 2^h pages, namely k == h.
-     */
+     	 */
 
 	// We can exploit size(=2^k) to have at each loop the address the page that
 	// resides in the middle of the found block.
@@ -94,8 +94,8 @@ block_found:
 		list_head_add(&(buddy->lru), &(area->free_list));
 
 		// Increase the number of free blocks of the free_area_t.
-        (area->nr_free)++;
-    }
+        	(area->nr_free)++;
+    	}
 
 	buddy_system_dump(zone);
 
@@ -132,26 +132,26 @@ void bb_free_pages(zone_t *zone, page_t *page, unsigned int order) {
 		}
 
 		// we are here only if buddy is free and can be merged with page.
-        area = &(zone->free_area[order]);
+        	area = &(zone->free_area[order]);
 
 		// remove buddy from the list of available blocks in its free_area_t
-        list_head_del(&(buddy->lru));
+       		list_head_del(&(buddy->lru));
 
 		// Decrease the number of free block of the current free_area_t.
-        (area->nr_free)--;
+        	(area->nr_free)--;
 
 		// Update the page index and the buddy index.
 		if(buddy < page) {
-            unsigned long tmp = page_idx;
-		    page_idx = buddy_idx;
-		    buddy_idx = tmp;
+           		unsigned long tmp = page_idx;
+		    	page_idx = buddy_idx;
+		    	buddy_idx = tmp;
 
-		    page->private = 0;
-            page = buddy;
+		    	page->private = 0;
+            		page = buddy;
 		} else {
 		    buddy->private = 0;
 		}
-        (page->private)++;
+        	(page->private)++;
 
 		order++;
 	}
@@ -163,12 +163,12 @@ void bb_free_pages(zone_t *zone, page_t *page, unsigned int order) {
 	coalesced->private = order;
 
 	//get the updated area
-    area = &(zone->free_area[order]);
+    	area = &(zone->free_area[order]);
 	// Insert the coalesced block in the free_area as available block
 	list_head_add(&(coalesced->lru), &(area->free_list));
 
-    // Increase the number of free blocks of the free_area.
-    (area->nr_free)++;
+    	// Increase the number of free blocks of the free_area.
+    	(area->nr_free)++;
 
 	buddy_system_dump(zone);
 }
